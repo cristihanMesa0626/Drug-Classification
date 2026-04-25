@@ -1,0 +1,47 @@
+name: CI - Train and Evaluate Model
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  train-and-evaluate:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v1
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Train model
+        run: python train.py
+
+      - name: Evaluate model
+        run: python evaluate.py
+
+      - name: Publish metrics report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## 📊 Model Metrics" > report.md
+          cat ./Results/metrics.txt >> report.md
+          echo "" >> report.md
+          echo "## 🔥 Confusion Matrix" >> report.md
+          echo "![Confusion Matrix](./Results/model_results.png)" >> report.md
+          cml comment create report.md
