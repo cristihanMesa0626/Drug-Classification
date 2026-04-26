@@ -10,10 +10,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -33,7 +33,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli login --token $HF_TOKEN --add-to-git-credential
-          huggingface-cli upload cristihanMesa0626/Drug-Classification ./App --repo-type=space --commit-message="Sync App files"
-          huggingface-cli upload cristihanMesa0626/Drug-Classification ./Model /Model --repo-type=space --commit-message="Sync Model"
-          huggingface-cli upload cristihanMesa0626/Drug-Classification ./Results /Metrics --repo-type=space --commit-message="Sync Results"
+          hf login --token $HF_TOKEN
+          hf upload cristihanMesa0626/Drug-Classification ./App --repo-type=space --commit-message="Sync App files"
+          hf upload cristihanMesa0626/Drug-Classification ./Model /Model --repo-type=space --commit-message="Sync Model"
+          hf upload cristihanMesa0626/Drug-Classification ./Results /Metrics --repo-type=space --commit-message="Sync Results"
