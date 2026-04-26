@@ -1,8 +1,5 @@
 scikit-learn
 pandas
 numpy
-matplotlib
-seaborn
 gradio==5.23.0
 joblib
-black
