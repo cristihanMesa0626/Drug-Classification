@@ -1,39 +1,8 @@
-name: CD - Deploy to HuggingFace
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Train model
-        run: python train.py
-
-      - name: Evaluate model
-        run: python evaluate.py
-
-      - name: Install HuggingFace CLI
-        run: pip install -U "huggingface_hub[cli]"
-
-      - name: Deploy to HuggingFace
+- name: Deploy to HuggingFace
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf login --token $HF_TOKEN
+          hf auth login --token $HF_TOKEN
           hf upload cristihanMesa0626/Drug-Classification ./App --repo-type=space --commit-message="Sync App files"
           hf upload cristihanMesa0626/Drug-Classification ./Model /Model --repo-type=space --commit-message="Sync Model"
           hf upload cristihanMesa0626/Drug-Classification ./Results /Metrics --repo-type=space --commit-message="Sync Results"
