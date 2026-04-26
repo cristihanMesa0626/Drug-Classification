@@ -3,6 +3,6 @@ pandas
 numpy
 matplotlib
 seaborn
-gradio==5.23.0
+gradio==5.29.0
 joblib
 black
